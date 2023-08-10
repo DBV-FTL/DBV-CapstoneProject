@@ -42,7 +42,7 @@ function Login({login, client, setClient}) {
               const decodedToken = jwtDecode(token); //a way to get username from token
               if (client==='user'){
                 login((prev) => ({...prev, user: decodedToken, isAuthenticated: true, services: services?.data?.providers}))
-              navigate('/')
+                navigate('/')
 
                } else if (client==='provider'){
                 if (menu){
@@ -75,7 +75,7 @@ function Login({login, client, setClient}) {
       }
     }
 
-    let optionMessage
+    let optionMessage= 'Login as Sineer'
     if (client==='user'){
       optionMessage= 'Login as Sineer'
     } else if (client==='provider'){
@@ -90,7 +90,7 @@ function Login({login, client, setClient}) {
             <input onChange= {(e) => handleFormInput(e)} name='email' placeholder='Input E-mail' required/>
             <input onChange= {(e) => handleFormInput(e)} type= 'password' name='password' placeholder='Input Password' required/>
             </form> 
-            <button className='submit-login' onClick={async (e) => await handleLogin(e)} > Login! </button>
+            <button className='submit-login' onClick= {async (e) => await handleLogin(e)} > Login! </button>
             <p onClick={() => changeClient(client)} className='option-message'> {optionMessage} </p>
 
         </div>

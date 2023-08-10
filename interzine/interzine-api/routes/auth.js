@@ -14,7 +14,7 @@ const upload = multer({ storage: storage });
 const {
   S3Client,
   PutObjectCommand,
-  GetObjectCommand,
+  GetObjectCommand
 } = require("@aws-sdk/client-s3");
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 
@@ -44,8 +44,17 @@ async function getImageUrl(item) {
   return url;
 }
 
+async function getHeroImageUrl(item) {
+  const getObjectParams = {
+    Bucket: BUCKET_NAME,
+    Key: item.service_provider_hero,
+  };
+  const command = new GetObjectCommand(getObjectParams);
+  const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
+  return url;
+}
+
 router.post("/user/register", async (req, res, next) => {
-  console.log("req.body", req.body);
   try {
     const user = await User.register(req.body);
     const token = generateAuthToken({ ...user, client: "user" });
@@ -123,8 +132,10 @@ router.get("/user", async (req, res, next) => {
   try {
     const { user } = res.locals;
     const providers = await User.fetchProviderByZipCode(user);
+    console.log("providers", providers);
     for (const provider of providers) {
       provider.profile_picture = await getImageUrl(provider);
+      console.log("provider", provider);
     }
     return res.status(200).json({ providers });
   } catch (err) {
@@ -169,36 +180,53 @@ router.put(
   upload.single("image"),
   async (req, res, next) => {
     try {
-      const { provider } = res.locals;
-      console.log("provider", provider);
-      console.log("photo", req.file);
-      console.log("blurb", req.body);
+      const { user } = res.locals;
+      const provider = await ServiceProvider.fetchProviderByEmail(user.email)
       const imageName = randomImageName();
-
-      const getObjectParams = {
+      const params = {
         Bucket: BUCKET_NAME,
-        Key: item.profile_picture,
+        Key: imageName,
+        Body: req.file.buffer,
+        ContentType: req.file.mimetype,
       };
-      const getCommand = new GetObjectCommand(getObjectParams);
-      const image = await s3.send(getCommand);
+      
+      const putCommand = new PutObjectCommand(params);
+      await s3.send(putCommand);
+      updatedProvider = await ServiceProvider.updateHeroAndDescription({
+        provider,
+        photo: imageName,
+        blurb: req.body,
+      });
 
-      if (!image) {
-        const params = {
-          Bucket: BUCKET_NAME,
-          Key: imageName,
-          Body: req.file.buffer,
-          ContentType: req.file.mimetype,
-        };
-        const putCommand = new PutObjectCommand(params);
-        await s3.send(putCommand);
-      }
-      updatedProvider = await ServiceProvider.updateHeroAndDescription({ provider, photo: req.file, blurb: req.body});
-
+      console.log("updaetdProvider", updatedProvider)
       return res.status(201).json({ updatedProvider });
     } catch (err) {
       next(err);
     }
   }
 );
+
+router.get("/user/:id", async (req, res, next) => {
+  try {
+    const userId = req.params.id;
+    const user = await User.fetchUserById(userId);
+    console.log("ahh", user);
+    res.status(200).json({ user });
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.post("/provider/email", async (req, res, next) => {
+  try {
+    const email = req.body?.email;
+    const provider = await ServiceProvider.fetchProviderByEmail(email);
+    provider.profile_picture = await getImageUrl(provider);
+    provider.service_provider_hero = await getHeroImageUrl(provider)
+    res.status(200).json({ provider });
+  } catch (err) {
+    next(err);
+  }
+});
 
 module.exports = router;

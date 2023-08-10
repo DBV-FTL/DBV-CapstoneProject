@@ -22,8 +22,7 @@ img.tile-img:hover {
 
 }
 
-
-img{
+.tile-img{
     border: solid;
     border-color: orange;
 }

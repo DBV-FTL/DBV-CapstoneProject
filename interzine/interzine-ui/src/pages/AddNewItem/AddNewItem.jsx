@@ -5,7 +5,7 @@ import apiClient from "../../services/apiClient"
 
 
 function AddNewItem({appState, updateMenu, setAddNewItem}) { 
-    const [formInput, setFormInput] = useState({name:'', cost:'', rating:''})
+    const [formInput, setFormInput] = useState({name:'', cost:''})
     const navigate = useNavigate()
 
     function handleChange(e) {
@@ -19,9 +19,13 @@ function AddNewItem({appState, updateMenu, setAddNewItem}) {
 
     async function handleSubmit(e) {
         e.preventDefault()
-        await apiClient.addNewItem(formInput)
+        const newMenuItem   = await apiClient.addNewItem(formInput)
+
+        console.log('newMenuItem', newMenuItem.data.newMenuItem.image_url)
+        formInput.image_url = newMenuItem.data.newMenuItem.image_url
+        console.log("formInput Image", formInput.image_url)
         updateMenu({...appState, menuItems:[...appState.menuItems, formInput]})
-        setFormInput({name:'', cost:'', rating:''})
+        setFormInput({name:'', cost:''})
         setAddNewItem(false)
         navigate('/')
     }
@@ -42,7 +46,7 @@ function AddNewItem({appState, updateMenu, setAddNewItem}) {
     fontSize: '14pt',
     borderRadius: '10px',
     marginTop: '1%'
-    // padding: '0 2rem'
+    // padding: '0 2rem'sss
 
 
     }
@@ -54,7 +58,7 @@ function AddNewItem({appState, updateMenu, setAddNewItem}) {
                 <label> Name </label>
                 <input className= 'new-input' value={formInput.name} onChange={(e) => handleChange(e)} name='name' placeholder='name' required/>
                 <label> Image </label>
-                <input className='file-selector' name="image" type="file" onChange={handleFileChange}/>
+                <input className='file-selector' name="image" type="file" accept='image/png, image/jpg, image/jpeg' onChange={handleFileChange}/>
                 <label> Cost </label>
                 <input  className= 'new-input' value={formInput.cost} type='number' onChange={(e) => handleChange(e)} min='0' name='cost' placeholder='cost' required/>
                 

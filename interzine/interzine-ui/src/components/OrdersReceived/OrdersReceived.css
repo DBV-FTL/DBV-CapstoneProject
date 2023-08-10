@@ -1,0 +1,20 @@
+.orders-received{
+    margin-top:5%
+}
+
+.empty-orders h1{
+    color: beige;
+    text-align: center;
+}
+
+.empty-orders p{
+    color: beige;
+    text-align: center;
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.empty-orders{
+    margin-top: 20%;
+}

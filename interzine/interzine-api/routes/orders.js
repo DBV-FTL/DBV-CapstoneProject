@@ -36,19 +36,12 @@ router.post("/create", security.extractUserFromJWT, async (req, res, next) => {
   try {
     const { user } = res.locals;
     console.log("create order", user, req.body);
-    // Orders.addOrder({item: req.body.item, user}).then((response)=>{
-    //   setTimeout(() => {
-    //     console.log('new order', response, new Date())
-    //   }, 2000);
-
-    // return res.status(200).json({response})
-
-    // })
     const newOrder = await Orders.addOrder({ item: req.body.item, user });
     setTimeout(() => {
       console.log("new order", newOrder, new Date());
     }, 5000);
     return res.status(200).json({ newOrder });
+
   } catch (err) {
     next(err);
   }
@@ -58,7 +51,7 @@ router.get("/previous", security.extractUserFromJWT, async (req, res, next) => {
   try {
     const { user } = res.locals;
     const listOrders = await Orders.listOrders({ user });
-    for (const listOrder in listOrders){
+    for (const listOrder of listOrders){
           listOrder.image_url = await getImageUrl(listOrder)
     }
     return res.status(201).json({ listOrders });
@@ -70,8 +63,11 @@ router.get("/previous", security.extractUserFromJWT, async (req, res, next) => {
 
 router.get("/provider-previous", security.extractUserFromJWT, async (req, res, next) => {
   try {
-    const { provider } = res.locals;
-    const listOrders = await Orders.listProviderOrders({ provider });
+    const { user } = res.locals;
+    const listOrders = await Orders.listProviderOrders({ user });
+    for (const listOrder of listOrders){
+      listOrder.image_url = await getImageUrl(listOrder)
+}
     return res.status(201).json({ listOrders });
   } catch (err) {
     next(err);

@@ -53,7 +53,6 @@ class Orders {
                 WHERE name = $1 AND service_provider_id = $2`,
               [item.product_name, item.service_provider_id]
             );
-            // console.log()
             const item_id = result.rows[0].id;
             const item_cost= result.rows[0].cost;
             const item_image_url= result.rows[0].image_url
@@ -68,11 +67,8 @@ class Orders {
 
             orderDetails = [...orderDetails, r.rows[0]];
         })
-        ) //.then(() => {
-        //     console.log("ordered", orderDetails, new Date())
-        //   return orderDetails;
-        // });
-            console.log("ordered", orderDetails, new Date())
+        ) 
+          console.log("ordered", orderDetails, new Date())
 
           return orderDetails;
 
@@ -124,7 +120,7 @@ class Orders {
     return result.rows[0].id;
   }
 
-  static async listProviderOrders({ provider }) {
+  static async listProviderOrders({ user }) {
     if (user?.client && user?.client === "user")
       throw new UnauthorizedError("User is unauthorized");
     const result = await db.query(
@@ -134,7 +130,7 @@ class Orders {
       ON o.id = od.order_id
       WHERE o.provider_id = $1
       ORDER BY o.id DESC`,
-    [provider.id]
+    [user.id]
     );
 
     return result.rows;

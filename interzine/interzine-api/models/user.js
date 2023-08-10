@@ -32,7 +32,6 @@ class User {
   }
 
   static async register(creds) {
-    console.log('creds', creds)
     const { email, username, firstName, lastName, password, zip_code } = creds;
     const requiredCreds = [
       "email",
@@ -58,16 +57,13 @@ class User {
 
     const existingUserWithEmail = await User.fetchUserByEmail(email);
     if (existingUserWithEmail) {
-      console.log(existingUserWithEmail);
       throw new BadRequestError(`Duplicate email: ${email}`);
     }
-    console.log('in reg', password)
 
     // if(!validatePassword(password)) throw new UnprocessableEntityError('Password does not satisfy requirements')
 
     const hashedPassword = await bcrypt.hash(password, BCRYPT_WORK_FACTOR);
     const normalizedEmail = email.toLowerCase();
-    console.log("we got this far")
     
     const result = await db.query(
       `
@@ -78,7 +74,6 @@ class User {
         `,
       [firstName, lastName, username, normalizedEmail, hashedPassword, zip_code]
     );
-    console.log("it inputted into database so now what")
     const user = result.rows[0];
     return user;
   }
@@ -92,9 +87,18 @@ class User {
     return user;
   }
 
+  static async fetchUserById(id) {
+    const result = await db.query(`SELECT id, first_name, last_name, username, email, zip_code FROM users WHERE id = $1`, [
+      id
+    ]);
+
+    const user = result.rows[0];
+    return user;
+  }
+
   static async fetchProviderByZipCode( {email} ) {
     const result = await db.query(
-      `SELECT id, name, cuisine, zip_code, profile_picture 
+      `SELECT id, name, cuisine, zip_code, profile_picture, address
        FROM service_providers 
        WHERE zip_code = (SELECT zip_code FROM users WHERE email = $1)`, [email]
     );

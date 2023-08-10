@@ -146,8 +146,12 @@ h6{
 }  
 
 .material-symbols-outlined.profile{
-    color:white
+    color:white;
 }
+
+/* .material-symbols-outlined.account{
+    color:white
+} */
 
 
 @media (max-width: 1100px) {
@@ -341,7 +345,10 @@ h6{
     margin-bottom: auto;
     align-self: center;
     margin-right: 2%;
+    cursor: pointer
+
 }
+
 
 .authenticated-buttons{
     display: flex;

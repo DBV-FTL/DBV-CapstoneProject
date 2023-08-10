@@ -1,6 +1,6 @@
-import { useElements, useStripe } from "@stripe/react-stripe-js";
+// import { useElements, useStripe } from "@stripe/react-stripe-js";
 import { useEffect, useState } from "react";
-import { PaymentElement } from "@stripe/react-stripe-js";
+// import { PaymentElement } from "@stripe/react-stripe-js";
 
 
 export default function CheckoutForm({}) {

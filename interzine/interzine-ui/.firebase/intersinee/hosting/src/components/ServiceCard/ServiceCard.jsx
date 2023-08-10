@@ -4,9 +4,6 @@ import './ServiceCard.css'
 import { Link } from 'react-router-dom'
 
 function ServiceCard({service}) {
-    // console.log('service', service, service.id)
-
-
     return (
         <>
     

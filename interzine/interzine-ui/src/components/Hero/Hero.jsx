@@ -36,14 +36,14 @@ export default function Hero() {
           />
           <div className="text">
             <h2>
-              Intersinne
-              <span>
+              Intersinee
+              <span className='intersinee-span'>
                 Inter<strong className="z">Sínee</strong>
               </span>
-              <span>
+              <span className='intersinee-span'>
                 Inter<strong className="z">Sínee</strong>
               </span>
-              <span>
+              <span className='intersinee-span'>
                 <h9 className="z">Your taste of Home.</h9>
                 <strong> Yum!🧑‍🍳</strong>
               </span>

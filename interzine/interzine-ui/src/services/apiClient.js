@@ -95,7 +95,6 @@ class ApiClient {
   }
 
   async fetchMenuItem(id) {
-    // console.log("hello?");
     return await this.request({ endpoint: `menu/food/${id}` });
   }
 
@@ -138,6 +137,36 @@ class ApiClient {
     })
   }
 
+  async fetchOrdersReceived(){
+    return await this.request({
+      endpoint: 'orders/provider-previous'
+    })
+  }
+
+  
+  async fetchUserById(id){
+    return await this.request({
+      endpoint: `auth/user/${id}`
+    })
+  }
+
+  async fetchProviderByEmail(email){
+    return await this.request({
+      endpoint: "auth/provider/email",
+      method: "POST",
+      data: {email},
+    })
+  }
+
+  async updateProviderProfile(data){
+    return await this.request({
+      endpoint: "auth/provider/update",
+      method: "PUT",
+      data: data,
+      headers: {"Content-Type":"multipart/form-data"}
+    })
+  }
+ 
   async submitPhoto(form){
     return await this.request({
       endpoint: "auth/provider/photo",

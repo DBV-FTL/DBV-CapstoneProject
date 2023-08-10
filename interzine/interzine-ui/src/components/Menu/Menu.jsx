@@ -8,10 +8,13 @@ import apiClient from '../../services/apiClient'
 function Menu(props) {
     console.log('hi')
     let menu
+    let provider
+    let client
     
     if (props.menu){
         menu= props.menu
-        
+        provider= props.provider
+        client= 'provider'
 
         
     } else {
@@ -27,17 +30,23 @@ function Menu(props) {
             })
         }, [])
         menu = userMenu
+        provider= props.services.find((provider)=> provider.id=== parseInt(id))
+        client= 'user'
 
     }
 
     return (
         <>
-        <ServiceHero /> 
+        {
+            !props.menu && 
+        <ServiceHero provider={provider} client={'user'}/> 
+
+        }
         
         <div className='menu'>
            
             {
-                menu?.map(food=> <FoodCard  food={food}/>)
+                menu?.map(food=> <FoodCard  food={food} client={client} />)
             }
         </div>
         </>

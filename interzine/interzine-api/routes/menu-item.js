@@ -40,9 +40,7 @@ const s3 = new S3Client({
 })
 
 router.post("/create", security.extractUserFromJWT, upload.single("image"), async (req, res, next) => {
-  console.log('hi')
   try {
-    // security.extractUserFromJWT
     console.log("req.body", req.body)
     console.log("req.file", req.file)
     
@@ -66,6 +64,8 @@ router.post("/create", security.extractUserFromJWT, upload.single("image"), asyn
       item: req.body,
       image_name: imageName
     });
+
+    newMenuItem.image_url = await getImageUrl(newMenuItem)
     console.log('done waiting')
     return res.status(201).json({ newMenuItem });
   } catch (err) {
@@ -87,7 +87,6 @@ router.get("/:id", async (req, res, next) => {
 });
 
 router.get("/food/:id", async (req, res, next) => {
-  // console.log('in router', req)
   try {
     const id = req.params.id;
     const menuItem = await MenuItem.fetchMenuItem(id);

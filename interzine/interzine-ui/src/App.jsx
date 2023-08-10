@@ -22,6 +22,7 @@ import Footer from './components/Footer/Footer'
 import Orders from './components/Orders/Orders'
 import Profile from './components/Profile/Profile'
 import CheckoutForm from './components/CheckoutForm/CheckoutForm'
+import OrdersReceived from './components/OrdersReceived/OrdersReceived'
 
 function App() {
   const [client, setClient]= useState('user') //client is either 'user' or 'provider'
@@ -58,14 +59,17 @@ function App() {
           setClient('user')
           setAppState({services: services?.data?.providers, user:appUser, isAuthenticated:true, cart:{}, prevOrders: prevOrders? prevOrders?.data?.listOrders : []})
         } else if (appUser?.client==='provider' && (appUser.exp * 1000 > Date.now()) ){
-            const menu= await apiClient.fetchMenuItems(appUser.id)
+            const menu= await apiClient.fetchMenuItems(appUser?.id)
+            const providerObject = await apiClient.fetchProviderByEmail(appUser?.email)
+            const ordersReceived= await apiClient.fetchOrdersReceived()
+            // console.log('oc??',ordersRecieved)
             setClient('provider')
-            setAppState({menuItems: menu?.data?.menuItems, provider:appUser, isAuthenticated:true})
+            setAppState({menuItems: menu?.data?.menuItems, provider:appUser, providerObject: providerObject?.data?.provider, isAuthenticated:true, ordersReceived: ordersReceived?.data?.listOrders })
           
           
         } else{
           await apiClient.logoutUser()
-          setAppState({...appState, isAuthenticated:false})
+          setAppState({isAuthenticated:false})
 
         }
     }
@@ -98,7 +102,7 @@ function App() {
         (client==='user'&&
         <>
         <Route path='/' element={<Shop services={appState?.services}  menus={menus}/>}/>
-        <Route path='menu/:id' element={<Menu setMenus={setMenus}/>}/>
+        <Route path='menu/:id' element={<Menu setMenus={setMenus} services={appState?.services}/>}/>
         <Route path='food/:id' element={<FoodDetail cart={appState.cart} addToCart={setAppState}/>}/>
         <Route path='/orders' element={<Orders services={appState?.services} orders={appState?.prevOrders}/>}/>
 
@@ -108,7 +112,11 @@ function App() {
         
 
         (client==='provider'&&
-        <Route path='/' element={<Store appState={appState} updateMenu={setAppState}/>}/>
+        <>
+          <Route path='/' element={<Store appState={appState} updateMenu={setAppState}/>}/>
+          <Route path='/orders' element={<OrdersReceived ordersReceived={appState?.ordersReceived}/>}/>
+        </>
+        
         )
           : 
           <Route path='/' element={

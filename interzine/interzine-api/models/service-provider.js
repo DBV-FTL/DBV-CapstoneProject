@@ -90,10 +90,9 @@ class ServiceProvider {
     UPDATE service_providers
     SET service_provider_hero = $1, service_provider_blurb = $2
     WHERE id = $3
-    RETURNING id, name, cuisine, email, profile_picture, service_provider_hero, service_provider_blurb, zip_code, address`, [photo, blurb])
+    RETURNING id, name, cuisine, email, profile_picture, service_provider_hero, service_provider_blurb, zip_code, address`, [photo, blurb.name, provider.id])
 
-    console.log("results", result.rows[0])
-    return result
+    return result.rows[0]
 
   }
   static async fetchProviderByEmail(email) {

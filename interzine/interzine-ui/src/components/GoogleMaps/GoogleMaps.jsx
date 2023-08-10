@@ -44,7 +44,7 @@ function Map() {
   const center = useMemo(() => ({ lat: 37.789744, lng: -122.397234 }), []);
   const [selected, setSelected] = useState(null);
   const [directionsResponse, setDirectionsResponse] = useState();
-  const [providersAddresses, setProvidersAddresses] = useState(null);
+  const [providersAddresses, setProvidersAddresses] = useState([]);
   const [distance, setDistance] = useState("");
   const [duration, setDuration] = useState("");
   const [destination, setDestination] = useState({
@@ -58,7 +58,6 @@ function Map() {
     <>
       <div className="places-container">
         <PlacesAutocomplete
-          providersAddresses={providersAddresses}
           setProvidersAddresses={setProvidersAddresses}
           setSelected={setSelected}
           setDirectionsResponse={setDirectionsResponse}
@@ -99,7 +98,6 @@ function Map() {
 }
 
 function PlacesAutocomplete({
-  providersAddresses,
   setProvidersAddresses,
   setSelected,
   setDirectionsResponse,
@@ -119,10 +117,7 @@ function PlacesAutocomplete({
     clearSuggestions,
   } = usePlacesAutocomplete();
 
-  const [res, setRes] = useState([]);
-
   const handleSelect = async (address) => {
-    setRes([]);
     setValue(address, false);
     clearSuggestions();
 
@@ -132,9 +127,6 @@ function PlacesAutocomplete({
 
     getProvidersGeoCode({
       setProvidersAddresses,
-      providersAddresses,
-      res,
-      setRes,
     });
   };
 
@@ -195,38 +187,27 @@ function PlacesAutocomplete({
 async function fetchProviders() {
   const pro = await apiClient.fetchServicesByZip();
   const providersAddresses = pro.data.providers.map((pro) => {
-    console.log("pro", pro);
     if (
-      pro.address.length > 0 &&
-      pro.address.charAt(pro.address.length - 1) === " "
+      pro.address?.length > 0 &&
+      pro.address?.charAt(pro.address.length - 1) === " "
     )
       pro.address = pro.address.substring(0, pro.address.length - 1);
     const address = pro.address + ", USA";
     return address;
   });
-  console.log("fetchProviders", providersAddresses);
   return providersAddresses;
 }
 
 async function getProvidersGeoCode({
   setProvidersAddresses,
-  providersAddresses,
-  res,
-  setRes,
 }) {
   const addresses = await fetchProviders();
   Promise.all(
     addresses.map(async (address) => {
-      console.log("map", address);
       const results = await getGeocode({ address });
       const { lat, lng } = await getLatLng(results[0]);
 
-      console.log("lat", lat, "long", lng);
-      setRes((oldRes) => [...oldRes, { lat, lng }]);
-      console.log("res", res);
-
-      setProvidersAddresses(res);
-      console.log("providers addresses", providersAddresses);
+      setProvidersAddresses((oldResults) => [...oldResults, { lat, lng }]);
     })
   );
 }
@@ -262,7 +243,6 @@ function clearRoute({
   orgRef,
   setDestination,
 }) {
-  console.log("clearing");
   setDestination({});
   setDirectionsResponse(null);
   setDistance("");

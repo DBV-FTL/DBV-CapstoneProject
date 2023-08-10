@@ -3,7 +3,8 @@
 
 DROP DATABASE interzine;
 CREATE DATABASE interzine;
-\connect interzine
+\connect interzine;
+
 
 \i interzine-schema.sql
 

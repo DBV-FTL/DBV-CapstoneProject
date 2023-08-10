@@ -13,11 +13,12 @@
     border-color: black;
     border-width: 2px;
     box-shadow: 5px 5px 10px rgba(253, 183, 97, 0.859);
+    cursor: pointer;
 }
 
-.food-card:hover {
+/* .food-card:hover {
     transform: translateY(-5px); 
-  }
+  } */
 
 .food-image{
     width: 200px;
