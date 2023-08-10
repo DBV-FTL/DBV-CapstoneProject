@@ -103,6 +103,7 @@ class ServiceProvider {
     );
 
     const provider = result.rows[0];
+    console.log("fetch provider", provider)
     return provider;
   }
 
