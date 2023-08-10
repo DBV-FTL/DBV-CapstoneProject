@@ -220,10 +220,9 @@ router.get("/user/:id", async (req, res, next) => {
 router.post("/provider/email", async (req, res, next) => {
   try {
     const email = req.body?.email;
-    console.log("email", email)
     const provider = await ServiceProvider.fetchProviderByEmail(email);
     provider.profile_picture = await getImageUrl(provider);
-    provider.service_provider_hero = await getHeroImageUrl(provider)
+    if (provider?.service_provider_hero) provider.service_provider_hero = await getHeroImageUrl(provider)
     res.status(200).json({ provider });
   } catch (err) {
     next(err);
