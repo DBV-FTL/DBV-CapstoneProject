@@ -96,6 +96,7 @@ class ServiceProvider {
 
   }
   static async fetchProviderByEmail(email) {
+    console.log("fetch email", email)
     const result = await db.query(
       `SELECT * FROM service_providers WHERE email = $1`,
       [email.toLowerCase()]
