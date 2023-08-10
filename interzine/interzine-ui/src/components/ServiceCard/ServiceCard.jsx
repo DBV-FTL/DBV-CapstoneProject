@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 
 function ServiceCard({service}) {
     // console.log('service', service, service.id)
-
+    
 
     return (
         <>
@@ -13,7 +13,7 @@ function ServiceCard({service}) {
         <div className='service-card'>
         <div className='service-info'>
           <Link to={`/menu/${service?.id}`} className='service-link'>
-            <img className='service-image' src={'https://furtherafrica.com/content-files/uploads/2022/07/ethiopia_food.jpg'} />
+            <img className='service-image' src={service?.service_provider_hero ? service?.service_provider_hero : "https://cms-b-assets.familysearch.org/dims4/default/bf2d93e/2147483647/strip/true/crop/800x500+0+0/resize/2480x1550!/format/webp/quality/90/?url=https%3A%2F%2Ffamilysearch-brightspot.s3.amazonaws.com%2F89%2F3f%2F1a23c4a6fe52a96d2a6d2586cb90%2Fworld-cuisine.jpg"} />
           </Link>
             <div className='service-details'>
                 <div className='column'>

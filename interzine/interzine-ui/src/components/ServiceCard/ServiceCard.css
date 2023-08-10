@@ -31,6 +31,8 @@ width: 100%;
 border-color: black;
 height: 250px;
 border-radius: 5px;
+object-fit: cover;
+
 }
   
 .provider-image {
