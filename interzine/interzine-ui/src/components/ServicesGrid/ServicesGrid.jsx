@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import "./ServicesGrid.css";
 import SubNavbar from "../SubNavbar/SubNavbar";
 import ServiceHero from "../ServiceHero/ServiceHero";
+import Bot from "../Bot/Bot";
 
 function ServicesGrid({ services }) {
   const [servicesShown, setServicesShown] = useState(services);
@@ -19,6 +20,7 @@ function ServicesGrid({ services }) {
             </div>)}
         </div>
       </div>
+      <Bot/>
     </div>
   );
 
