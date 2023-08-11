@@ -38,13 +38,13 @@ class Orders {
 
     if (user?.client && user?.client === "provider")
       throw new UnauthorizedError("User is a Provider");
-    const order_id = await this.createOrderNumber({ user, item});
+    const order_id = await this.createOrderNumber({ user, item });
     const sp_id = await this.getServiceProviderId({ item });
 
     let orderDetails = [];
     try {
       if (Array.isArray(item)) {
-        // const orderDetail  s = [] 
+        // const orderDetail  s = []
         await Promise.all(
           item?.map(async (item) => {
             const result = await db.query(
@@ -54,26 +54,30 @@ class Orders {
               [item.product_name, item.service_provider_id]
             );
             const item_id = result.rows[0].id;
-            const item_cost= result.rows[0].cost;
-            const item_image_url= result.rows[0].image_url
+            const item_cost = result.rows[0].cost;
+            const item_image_url = result.rows[0].image_url;
 
             const r = await db.query(
               `
                 INSERT INTO order_details (product_name, quantity, menu_item_id, order_id, cost, image_url)
                 VALUES ($1, $2, $3, $4, $5, $6)
                 RETURNING *`,
-              [item.product_name, item.quantity, item_id, order_id, item_cost, item_image_url]
+              [
+                item.product_name,
+                item.quantity,
+                item_id,
+                order_id,
+                item_cost,
+                item_image_url,
+              ]
             );
 
             orderDetails = [...orderDetails, r.rows[0]];
-        })
-        ) 
-          console.log("ordered", orderDetails, new Date())
+          })
+        );
 
-          return orderDetails;
-
-      } 
-      else {
+        return orderDetails;
+      } else {
         const result = await db.query(
           `
             SELECT id FROM menu_items
@@ -99,17 +103,14 @@ class Orders {
   }
 
   static async getServiceProviderId({ item }) {
-    console.log('getting prov id....')
     const result = await db.query(
       `
     SELECT service_provider_id FROM menu_items
     WHERE name = $1`,
       [item.product_name]
     );
-    console.log("how many", result.rows);
   }
-  static async createOrderNumber({ user, item}) {
-    console.log('creating....',user.id)
+  static async createOrderNumber({ user, item }) {
     const result = await db.query(
       `
         INSERT INTO orders (user_id, provider_id, date)
@@ -124,19 +125,18 @@ class Orders {
     if (user?.client && user?.client === "user")
       throw new UnauthorizedError("User is unauthorized");
     const result = await db.query(
-    `
+      `
       SELECT * from orders as o
       RIGHT JOIN order_details as od
       ON o.id = od.order_id
       WHERE o.provider_id = $1
       ORDER BY o.id DESC`,
-    [user.id]
+      [user.id]
     );
 
     return result.rows;
   }
   static async listOrders({ user }) {
-    console.log('listing')
     if (user?.client && user?.client === "provider")
       throw new UnauthorizedError("User is a Provider");
     const result = await db.query(

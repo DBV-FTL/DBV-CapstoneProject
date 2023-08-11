@@ -89,9 +89,6 @@ router.post(
   upload.single("image"),
   async (req, res, next) => {
     try {
-      console.log("req.body", req.body);
-      console.log("req.file", req.file);
-
       // const buffer = await sharp(req.file.buffer).resize({height: 50, width:50, fit:"fill"}).toBuffer()
       const imageName = randomImageName();
 
@@ -132,10 +129,8 @@ router.get("/user", async (req, res, next) => {
   try {
     const { user } = res.locals;
     const providers = await User.fetchProviderByZipCode(user);
-    console.log("providers", providers);
     for (const provider of providers) {
       provider.profile_picture = await getImageUrl(provider);
-      console.log("provider", provider);
     }
     return res.status(200).json({ providers });
   } catch (err) {
@@ -198,7 +193,6 @@ router.put(
         blurb: req.body,
       });
 
-      console.log("updaetdProvider", updatedProvider)
       return res.status(201).json({ updatedProvider });
     } catch (err) {
       next(err);
@@ -210,7 +204,6 @@ router.get("/user/:id", async (req, res, next) => {
   try {
     const userId = req.params.id;
     const user = await User.fetchUserById(userId);
-    console.log("ahh", user);
     res.status(200).json({ user });
   } catch (err) {
     next(err);
