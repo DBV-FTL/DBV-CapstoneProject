@@ -61,7 +61,6 @@ class ServiceProvider {
     const existingProviderWithEmail =
       await ServiceProvider.fetchProviderByEmail(email);
     if (existingProviderWithEmail) {
-      console.log(existingProviderWithEmail);
       throw new BadRequestError(`Duplicate email: ${email}`);
     }
 
@@ -69,7 +68,6 @@ class ServiceProvider {
     //   throw new UnprocessableEntityError(
     //     "Password does not satisfy requirements"
     //   );
-      console.log("does it get here", address)
     const hashedPassword = await bcrypt.hash(password, BCRYPT_WORK_FACTOR);
     const normalizedEmail = email.toLowerCase();
     const result = await db.query(
@@ -96,14 +94,12 @@ class ServiceProvider {
 
   }
   static async fetchProviderByEmail(email) {
-    console.log("fetch email", email)
     const result = await db.query(
       `SELECT * FROM service_providers WHERE email = $1`,
       [email.toLowerCase()]
     );
 
     const provider = result.rows[0];
-    console.log("fetch provider", provider)
     return provider;
   }
 

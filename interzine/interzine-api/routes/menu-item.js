@@ -41,8 +41,6 @@ const s3 = new S3Client({
 
 router.post("/create", security.extractUserFromJWT, upload.single("image"), async (req, res, next) => {
   try {
-    console.log("req.body", req.body)
-    console.log("req.file", req.file)
     
     // const buffer = await sharp(req.file.buffer).resize({height: 50, width:50, fit:"fill"}).toBuffer()
     const imageName = randomImageName()
@@ -66,7 +64,6 @@ router.post("/create", security.extractUserFromJWT, upload.single("image"), asyn
     });
 
     newMenuItem.image_url = await getImageUrl(newMenuItem)
-    console.log('done waiting')
     return res.status(201).json({ newMenuItem });
   } catch (err) {
     next(err);
