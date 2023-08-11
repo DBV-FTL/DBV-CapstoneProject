@@ -195,7 +195,6 @@ function PlacesAutocomplete({
 async function fetchProviders() {
   const pro = await apiClient.fetchServicesByZip();
   const providersAddresses = pro.data.providers.map((pro) => {
-    console.log("pro", pro);
     if (
       pro.address.length > 0 &&
       pro.address.charAt(pro.address.length - 1) === " "
@@ -204,7 +203,6 @@ async function fetchProviders() {
     const address = pro.address + ", USA";
     return address;
   });
-  console.log("fetchProviders", providersAddresses);
   return providersAddresses;
 }
 
@@ -217,16 +215,12 @@ async function getProvidersGeoCode({
   const addresses = await fetchProviders();
   Promise.all(
     addresses.map(async (address) => {
-      console.log("map", address);
       const results = await getGeocode({ address });
       const { lat, lng } = await getLatLng(results[0]);
 
-      console.log("lat", lat, "long", lng);
       setRes((oldRes) => [...oldRes, { lat, lng }]);
-      console.log("res", res);
 
       setProvidersAddresses(res);
-      console.log("providers addresses", providersAddresses);
     })
   );
 }
@@ -262,7 +256,6 @@ function clearRoute({
   orgRef,
   setDestination,
 }) {
-  console.log("clearing");
   setDestination({});
   setDirectionsResponse(null);
   setDistance("");

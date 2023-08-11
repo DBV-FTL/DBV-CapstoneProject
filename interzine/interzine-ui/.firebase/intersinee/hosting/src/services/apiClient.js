@@ -13,7 +13,6 @@ class ApiClient {
   }
 
   async request({ endpoint, method = "GET", data = {} }) {
-    console.log('in request')
     const url = `${this.remoteHostUrl}/${endpoint}`;
     const headers = {
       "Content-Type": "application/json",
@@ -22,9 +21,7 @@ class ApiClient {
       headers["Authorization"] = `Bearer ${this.token}`;
     }
     try {
-      console.log('res incoming')
       const result = await axios({ url, method, data, headers });
-      console.log('res', result)
       return { data: result.data, error: null, status: result.status };
     } catch (err) {
       console.error({ errorResponse: err.response });
@@ -50,7 +47,6 @@ class ApiClient {
   
  }
   async signupUser(creds) {
-    console.log('signing up')
     return await this.request({
       endpoint: "auth/user/register",
       method: "POST",
@@ -60,7 +56,6 @@ class ApiClient {
   }
 
   async signupProvider(creds) {
-    console.log('signing up', creds)
     return await this.request({
       endpoint: "auth/provider/register",
       method: "post",
@@ -79,7 +74,6 @@ class ApiClient {
   }
 
   async addNewItem(creds) {
-    console.log('new item!!', creds)
     return await this.request({
       endpoint: "menu/create",
       method: "POST",
@@ -92,7 +86,6 @@ class ApiClient {
   }
 
   async fetchMenuItem(id) {
-    // console.log("hello?");
     return await this.request({ endpoint: `menu/food/${id}` });
   }
 
