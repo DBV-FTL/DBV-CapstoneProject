@@ -42,13 +42,10 @@ function App() {
         apiClient.setToken(token)
         const fromToken= await apiClient.fetchUserFromToken()
         const appUser= fromToken?.data?.user
-        console.log('loading initial data', appUser)
 
         if (appUser.client === 'user') {
-          console.log('oy')
           const services = await apiClient.fetchServicesByZip(appUser.zip_code)
           const prevOrders= await apiClient.fetchOrders()
-          console.log('yo', services)
           setClient('user')
           setAppState({services: services?.data?.providers, user:appUser, isAuthenticated:true, cart:{}, prevOrders: prevOrders? prevOrders?.data?.listOrders : []})
         } else if (appUser.client==='provider'){
@@ -62,8 +59,6 @@ function App() {
     loadInitialData()
 
   }, [])
-
-  console.log('app state', appState, client)
 
   return (
     <div className='app'>

@@ -5,14 +5,10 @@ import './Orders.css'
 
 function Orders({orders, services}) {
     const groupedById= {}
-    console.log('orders', orders)
     const sortedOrders= orders?.toSorted().reverse()
-    console.log('sorted orders', sortedOrders)
-
     // let prevOrder= orders[0]
     if (orders){
     for (const order of sortedOrders){
-        console.log('looping', groupedById)
         if (order.order_id in groupedById) {
             groupedById[order.order_id].push(order)
         } else {

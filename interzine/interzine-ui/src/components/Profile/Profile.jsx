@@ -5,15 +5,12 @@ import { useNavigate } from 'react-router-dom'
 
 function Profile({viewProfile, setViewProfile}) {
     const navigate= useNavigate()
-    console.log('showing profile')
 
     function handleMouseOver() {
-        console.log('show')
         setViewProfile(true)
     }
 
     function handleMouseOut() {
-        console.log('hide in profile')
         setViewProfile(false)
 
     }

@@ -5,7 +5,6 @@ import './Menu.css'
 import apiClient from '../../services/apiClient'
 
 function Menu(props) {
-    console.log('hi')
     let menu
     
     if (props.menu){

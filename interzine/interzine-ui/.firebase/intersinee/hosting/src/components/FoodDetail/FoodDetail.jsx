@@ -15,7 +15,6 @@ function FoodDetail({cart, addToCart}) {
 
         addToCart((prev)=> {
             if ((id in cart)){
-                console.log('food quantity', cart[id])
                 return {...prev, cart: {...cart, [id]: cart[id] + 1}}
                 
             } else{ 
@@ -30,7 +29,6 @@ function FoodDetail({cart, addToCart}) {
     function handleDecrement(){
         addToCart((prev)=> {
             if ((id in cart) && cart[id]>0){
-                console.log('food quantity', cart[id])
                 return {...prev, cart: {...cart, [id]: cart[id] - 1}}
                 
             } else{ 
@@ -42,7 +40,6 @@ function FoodDetail({cart, addToCart}) {
        
     }
 
-    console.log('at food deets',id)
     const [food, setFood]= useState()
 
    

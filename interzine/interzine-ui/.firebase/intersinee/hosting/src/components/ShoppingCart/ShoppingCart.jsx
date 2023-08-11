@@ -3,13 +3,11 @@ import apiClient from '../../services/apiClient'
 
 function ShoppingCart({setAppState, appState, cart, menus, services}) {
     let total=0
-    console.log(cart, menus)
     // const [itemsInCart, setItemsInCart] = useState([])
     let itemsInCart= []
 
     async function order(){
         const ordered= await apiClient.checkoutFoods(itemsInCart)
-        console.log(ordered, 'in order')
         setAppState({...appState, cart:{} })
     }
 
@@ -21,7 +19,6 @@ function ShoppingCart({setAppState, appState, cart, menus, services}) {
                 const foodInCart= menus.find((food) => food.id===parseInt(id))
                 const provider= services.find((service) => service.id=== foodInCart.service_provider_id)
                 const orderDate= new Date()
-                console.log('in cart',foodInCart)
                 itemsInCart= [...itemsInCart, {product_name: foodInCart.name, service_provider_id: foodInCart.service_provider_id, quantity, date: `${orderDate.toLocaleString('default',{month:'long'})} ${orderDate.getDate()}, ${orderDate.getFullYear()}` }]
                 total+= foodInCart.cost * quantity
                 // setItemsInCart([...itemsInCart, {product_name: foodInCart.name, service_provider_id: foodInCart.service_provider_id, quantity}])

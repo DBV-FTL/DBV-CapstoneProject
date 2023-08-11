@@ -23,12 +23,10 @@ function Navbar({appState, logout, setViewProfile, setIsOpen}) {
     }
 
     function handleMouseOver() {
-        console.log('show')
         setViewProfile(true)
     }
 
     function handleMouseOut() {
-        console.log('hide')
         // setViewProfile(false)
 
     }

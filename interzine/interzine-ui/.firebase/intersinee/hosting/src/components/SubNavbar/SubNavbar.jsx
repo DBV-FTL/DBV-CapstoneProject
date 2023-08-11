@@ -7,7 +7,6 @@ export default function SubNavbar({ services, setServices }) {
   const [filter, setFilter] = useState();
 
   function handleFilter(c) {
-    console.log("cuisine type", c);
     setCuisine(c);
     setServices(
       services?.filter((provider) => {
@@ -15,12 +14,9 @@ export default function SubNavbar({ services, setServices }) {
         return provider.cuisine.toLowerCase() === c;
       })
     );
-
-    console.log("cuisine button", filter);
   }
 
   function handleOnChange(e) {
-    console.log(e.target.value);
     setValue(e.target.value);
     cuisine
       ? setServices(
@@ -41,7 +37,6 @@ export default function SubNavbar({ services, setServices }) {
             );
           })
         );
-    console.log("who am i searching for?", filter);
   }
   //10 random cuisines
   return (
@@ -56,10 +51,11 @@ export default function SubNavbar({ services, setServices }) {
             onChange={handleOnChange}
           />
           <div className="search-icon">
-            <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
-            <span class="material-symbols-outlined search">
-              search
-            </span>
+            <link
+              rel="stylesheet"
+              href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0"
+            />
+            <span class="material-symbols-outlined search">search</span>
           </div>
         </div>
         <div className="category-buttons">
